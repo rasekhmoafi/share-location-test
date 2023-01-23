@@ -10,7 +10,7 @@ import { LocationService } from 'src/app/core/services/location.service';
   styleUrls: ['./share-location.component.scss']
 })
 export class ShareLocationComponent implements OnInit {
-  private map: any;
+  private map: any = undefined;
   private marker: any;
   longitude: number | undefined;
   latitude: number | undefined;
@@ -28,7 +28,10 @@ export class ShareLocationComponent implements OnInit {
   }
 
   private initMap(): void {
-    this.map = L.map('map', {
+    if (this.map != undefined) {
+      this.map = undefined
+    }
+    this.map = L.map('share-map', {
       center: [ 23.35353, 53.2565 ],
       zoom: 6,
       zoomControl: false
@@ -44,10 +47,9 @@ export class ShareLocationComponent implements OnInit {
       if(this.marker) {
         this.map.removeLayer(this.marker)
       }
-      console.log(e.latlng);
       this.latitude = e.latlng.lat;
-        this.longitude = e.latlng.lng;
-        this.marker = L.marker([this.latitude!, this.longitude!]).addTo(this.map);
+      this.longitude = e.latlng.lng;
+      this.marker = L.marker([this.latitude!, this.longitude!]).addTo(this.map);
     });
   }
 

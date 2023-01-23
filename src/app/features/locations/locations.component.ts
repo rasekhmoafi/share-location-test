@@ -10,8 +10,8 @@ import { LocationService } from 'src/app/core/services/location.service';
 })
 export class LocationsComponent implements OnInit {
 
- 
-  private map: any;
+
+  private map: any = undefined;
   private marker: any;
   locations: any = [];
   longitude: number | undefined;
@@ -23,15 +23,14 @@ export class LocationsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.getUserLocation();    
-    this.getLocations();    
+    // this.getUserLocation();
+    this.getLocations();
   }
 
 
   getLocations() {
     this.locationService.getAllLocations().subscribe(res => {
       this.locations = res;
-      console.log(res);
       this.initMap()
     })
   }
@@ -53,9 +52,12 @@ export class LocationsComponent implements OnInit {
 
 
   private initMap(): void {
-    this.map = L.map('map', {
+    if (this.map != undefined) {
+      this.map = undefined
+    }
+    this.map = L.map('main-map', {
       center: [  23.35353, 53.2565 ],
-      zoom: 12
+      zoom: 8
     });
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -68,32 +70,25 @@ export class LocationsComponent implements OnInit {
   }
 
   private addMarker(): void {
-      this.locations.forEach((element: any) => {
-        console.log(element);
-        
+      this.locations?.forEach((element: any) => {
         var marker = L.marker([element.latitude, element.longtitude]).addTo(this.map)
-        
         marker.on("click", () => {
           var popup = L.popup()
           .setLatLng([element.latitude, element.longtitude])
           .setContent(`
             <div>
-              <h2 style="background-color: blue"> Location Details </h2>
-              <br>
-              <h5>${element.name}</h5>
-              <br>
-              <h5>${element.type}</h5>
+              <div style="background-color: #438bc9;">
+                <h5 style="color: white; margin-left: 10px; margin-right: 10px"> Location Details </h5>
+              </div>
+              <div style="border: solid #438bc9 1px">
+                <h5>Name: ${element.name}</h5>
+                <h5>Type: ${element.type}</h5>
+              </div>
             </div>
           `)
-          .openOn(this.map);           
+          .openOn(this.map);
         });
       });
-  }
-
-  openInstantDetail(element: any) {
-    // this._bottomSheet.open(InstantDiscountDetailComponent, {
-    //   data: [element.salon_location[0],element.salon_location[1]]
-    // });
   }
 
 }

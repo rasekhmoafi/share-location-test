@@ -64,9 +64,11 @@
         .upload {
             border: solid #438bc9 1px;
             width: var(--item-width);
+            display: flex;
+            justify-content: center;
         }
       }
-    } 
+    }
   }
   .location-form-action {
     width: var(--general-width);
@@ -80,7 +82,7 @@
       }
     }
   }
-  
+
   @media (min-width: 320px) {
     /* smartphones, iPhone, portrait 480x320 phones */
     --general-width: 320px;

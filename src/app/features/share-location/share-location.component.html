@@ -11,7 +11,7 @@
             <div class="form-item">
                 <h5>Location on map: </h5>
                 <div class="map">
-                    <div class="map-container" id="map"></div>
+                    <div class="map-container" id="share-map"></div>
                 </div>
             </div>
             <div class="form-item">
@@ -33,7 +33,7 @@
     </div>
     <div class="location-form-action">
         <div class="buttons">
-            <button mat-raised-button color="" class="button" >Cancel</button>
+            <button mat-raised-button color="" class="button"  [routerLink]="['/locations']">Cancel</button>
             <button mat-raised-button color="primary" class="button" (click)="shareLocation()">Save</button>
         </div>
     </div>
