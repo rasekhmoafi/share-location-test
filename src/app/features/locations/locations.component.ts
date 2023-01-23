@@ -22,7 +22,7 @@ export class LocationsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.initMap()
+
     this.getUserLocation();    
     this.getLocations();    
   }
@@ -32,6 +32,7 @@ export class LocationsComponent implements OnInit {
     this.locationService.getAllLocations().subscribe(res => {
       this.locations = res;
       console.log(res);
+      this.initMap()
     })
   }
 
@@ -70,9 +71,21 @@ export class LocationsComponent implements OnInit {
       this.locations.forEach((element: any) => {
         console.log(element);
         
-        var marker = L.marker([element.salon_location[0], element.salon_location[1]]).addTo(this.map).bindTooltip(element.max_discount_percent + "% تخفیف").openTooltip();
+        var marker = L.marker([element.latitude, element.longtitude]).addTo(this.map)
+        
         marker.on("click", () => {
-          this.openInstantDetail(element)
+          var popup = L.popup()
+          .setLatLng([element.latitude, element.longtitude])
+          .setContent(`
+            <div>
+              <h2 style="background-color: blue"> Location Details </h2>
+              <br>
+              <h5>${element.name}</h5>
+              <br>
+              <h5>${element.type}</h5>
+            </div>
+          `)
+          .openOn(this.map);           
         });
       });
   }

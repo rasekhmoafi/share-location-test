@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { latLng } from 'leaflet';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, first } from 'rxjs';
 import { Location } from '../models/location.model';
 import { LocalStorageService } from './local-storage.service';
 
@@ -23,13 +23,12 @@ export class LocationService {
     this._locations$.next(locations)
     return this._locations$;
   }
-  addLocation(lat: string, lng: string) {
-    const newLocation: Location = {
-      latitude: lat,
-      longtitude: lng
-    }
-    this.locations$.subscribe(val => {
+  addLocation(newLocation: Location) {
+
+    this.locations$.pipe(first()).subscribe(val => {
       const newLocations = [...val, newLocation];
+      console.log(newLocations);
+      
       this._locations$.next(newLocations);
       this._localStorage.setItem('locations', JSON.stringify(newLocations))
     })

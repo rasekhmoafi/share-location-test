@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LocationsModule } from './features/locations/locations.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ShareLocationModule } from './features/share-location/share-location.module';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     AppRoutingModule,
     LocationsModule,
+    ShareLocationModule,
     BrowserAnimationsModule
   ],
   providers: [],

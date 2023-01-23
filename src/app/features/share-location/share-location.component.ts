@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as L from 'leaflet';
+import { LocationService } from 'src/app/core/services/location.service';
 
 
 @Component({
@@ -12,17 +14,22 @@ export class ShareLocationComponent implements OnInit {
   private marker: any;
   longitude: number | undefined;
   latitude: number | undefined;
+  name: string | undefined;
+  type: string | undefined;
+  url: string | undefined;
 
-  constructor() { }
+  constructor(
+    private locationService: LocationService,
+    private snack: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
     this.initMap()
   }
 
-
   private initMap(): void {
     this.map = L.map('map', {
-      center: [  23.35353, 53.2565 ],
+      center: [ 23.35353, 53.2565 ],
       zoom: 6,
       zoomControl: false
     });
@@ -43,5 +50,25 @@ export class ShareLocationComponent implements OnInit {
         this.marker = L.marker([this.latitude!, this.longitude!]).addTo(this.map);
     });
   }
+
+  shareLocation() {
+    if(this.name && this.latitude && this.longitude) {
+      const newLocation = {
+        latitude: this.latitude?.toString(),
+        longtitude: this.longitude?.toString(),
+        name: this.name,
+        type: this.type,
+        url: this.url
+      }
+      this.locationService.addLocation(newLocation)
+    }
+    else {
+      this.snack.open("Not enough data", "OK", {
+        duration: 4000
+      })
+    }
+  }
+
+
 
 }
