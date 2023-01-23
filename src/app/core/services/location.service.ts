@@ -1,35 +1,37 @@
 import { Injectable } from '@angular/core';
+import { latLng } from 'leaflet';
 import { BehaviorSubject } from 'rxjs';
 import { Location } from '../models/location.model';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
-  locations = new BehaviorSubject<Location[]>([]);
+  private _localStorage: Storage;
+  private _locations$ = new BehaviorSubject<Location[]>([]);
+  public locations$ = this._locations$.asObservable();
   
-  constructor() { }
+  constructor(
+    private localStorageService: LocalStorageService
+  ) { 
+    this._localStorage = localStorageService.localStorage;
+  }
 
   getAllLocations() {
-    return [
-      {
-        latitude: '23.01',
-        longtitude: '53.01'
-      },
-      {
-        latitude: '23.02',
-        longtitude: '53.02'
-      },
-      {
-        latitude: '23.03',
-        longtitude: '53.03'
-      },
-    ]
+    const locations = JSON.parse(this._localStorage.getItem('locations')!)
+    this._locations$.next(locations)
+    return this._locations$;
   }
-  addLocation(location: Location) {
-    this.locations.subscribe(val => {
-      const newLoc = [...val, location];
-      this.locations.next(newLoc);
+  addLocation(lat: string, lng: string) {
+    const newLocation: Location = {
+      latitude: lat,
+      longtitude: lng
+    }
+    this.locations$.subscribe(val => {
+      const newLocations = [...val, newLocation];
+      this._locations$.next(newLocations);
+      this._localStorage.setItem('locations', JSON.stringify(newLocations))
     })
   }
 }

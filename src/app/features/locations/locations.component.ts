@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as L from 'leaflet';
+import { LocationService } from 'src/app/core/services/location.service';
 
 @Component({
   selector: 'app-locations',
@@ -17,7 +18,7 @@ export class LocationsComponent implements OnInit {
   latitude: number | undefined;
   constructor(
     private snack: MatSnackBar,
-    
+    private locationService: LocationService
   ) { }
 
   ngOnInit(): void {
@@ -28,7 +29,10 @@ export class LocationsComponent implements OnInit {
 
 
   getLocations() {
-
+    this.locationService.getAllLocations().subscribe(res => {
+      this.locations = res;
+      console.log(res);
+    })
   }
 
   getUserLocation(): void{
