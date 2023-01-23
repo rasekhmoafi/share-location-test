@@ -1,0 +1,19 @@
+
+
+.map-frame {
+  position: relative;
+height: 100%;
+
+  .map-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+  }
+  .header {
+    position: absolute;
+    top: 30px;
+    right: 15px;
+    z-index: 9999;
+  }
+}
